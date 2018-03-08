@@ -24,7 +24,7 @@ public class RetrofitDownloaderService implements DataFetcherContract{
     }
 
     public Subscription getItemsList(final GetGalleryItemsListCallback callback) {
-
+        //Use RxJava implementations to download JSON file.
         return mApiEndPoint.getItems()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -48,6 +48,7 @@ public class RetrofitDownloaderService implements DataFetcherContract{
 
                     @Override
                     public void onNext(GalleryItemsList galleryItemsList) {
+                        //Pass the entire list to the callback implementor.
                         callback.onSuccess(galleryItemsList);
                     }
                 });

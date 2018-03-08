@@ -21,6 +21,7 @@ import com.bumptech.glide.request.target.Target;
 public class GlideImageDownloader implements ImageDownloaderContract {
     @Override
     public void downloadImage(Context context, String imageUrl, final ImageView imageView) {
+        //Glide will download and cache the images by default.
         Glide.with(context)
                 .load(imageUrl)
                 .listener(new RequestListener<Drawable>() {

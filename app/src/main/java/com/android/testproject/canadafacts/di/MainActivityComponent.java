@@ -11,7 +11,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 /**
- * Component part of Dagger2
+ * Component part of Dagger2 for main Activity
  */
 @Singleton
 @Component(modules = {RetrofitModule.class, PresenterModule.class})

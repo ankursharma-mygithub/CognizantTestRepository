@@ -17,13 +17,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by ankursharma on 3/8/18.
  */
 
+/**
+ * Module for initializng retorfit call for downloading JSON.
+ */
+
 @Module
 public class RetrofitModule {
 
     @Provides
     @Singleton
     Retrofit provideCall() {
-
 
         return new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)

@@ -13,6 +13,7 @@ import rx.Subscription;
  */
 public interface DataFetcherContract {
     Subscription getItemsList(final GetGalleryItemsListCallback callback);
+    //Callback(or subscriber, or observer) interface for JSON downloader
     interface GetGalleryItemsListCallback{
         void onSuccess(GalleryItemsList galleryItemsList);
         void onError(String message);

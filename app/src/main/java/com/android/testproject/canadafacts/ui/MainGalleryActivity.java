@@ -23,9 +23,10 @@ import butterknife.ButterKnife;
 
 public class MainGalleryActivity extends AppCompatActivity implements MainContract.View{
 
-
+    //For logger
     private static final String TAG = "MainGalleryActivity";
 
+    //Use Butter Knife library to bind the views
     //RecyclerView
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
@@ -33,7 +34,6 @@ public class MainGalleryActivity extends AppCompatActivity implements MainContra
     //Progress bar
     @BindView(R.id.progress)
     ProgressBar mProgressBar;
-
 
     //SwipeRefreshLayout is a part of support library and is a standard way to implement
     //common pull to refresh pattern in Android
@@ -47,11 +47,21 @@ public class MainGalleryActivity extends AppCompatActivity implements MainContra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DaggerMainActivityComponent.builder().retrofitModule(new RetrofitModule()).presenterModule(new PresenterModule(this)).build().inject(this);
+        //Call the Dagger component to inject dependencies
+        DaggerMainActivityComponent.builder()
+                .retrofitModule(new RetrofitModule())
+                .presenterModule(new PresenterModule(this))
+                .build()
+                .inject(this);
+
         setContentView(R.layout.activity_main_gallery);
+
+        //bind the views
         ButterKnife.bind(this);
+
         //Initialize the views
         initializeViews();
+
         //Display list of items
         getAndDisplayListOfItems();
     }
@@ -69,13 +79,15 @@ public class MainGalleryActivity extends AppCompatActivity implements MainContra
             mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
+                    //Dismiss the progress bar.
                     mSwipeRefreshLayout.setRefreshing(false);
+                    //Get the list of items.
                     getAndDisplayListOfItems();
                 }
             });
         }
 
-        //initialize recyclerview
+        //initialize recyclerview's layout manager
         if(mRecyclerView != null) {
             mRecyclerView.setLayoutManager(new LinearLayoutManager(MainGalleryActivity.this));
         }
@@ -108,6 +120,7 @@ public class MainGalleryActivity extends AppCompatActivity implements MainContra
     @Override
     public void displayListOfItems() {
         if(mRecyclerView != null) {
+            Log.d(TAG, "Got list of items");
             mRecyclerView.setAdapter(new MainGalleryAdapter(mPresenter));
         }
     }

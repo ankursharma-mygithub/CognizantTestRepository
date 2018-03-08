@@ -27,6 +27,7 @@ import rx.subscriptions.CompositeSubscription;
 
 public class MainGalleryActivityPresenter implements MainContract.Presenter {
 
+    //For logger purpose.
     private static final String TAG = "MainGalleryPresenter";
 
     //Main Activity
@@ -96,11 +97,13 @@ public class MainGalleryActivityPresenter implements MainContract.Presenter {
     @Override
     public void onBindItemAtPosition(final MainContract.RowItemHolder holder, int position) {
         GalleryItem item = mGalleryItemsList.getGalleryItems().get(position);
+        //Update description, and title
         holder.updateDescription(item.getDescription());
         holder.updateTitle(item.getTitle());
         String imageUrl = item.getImageUrl();
         final ImageView imageView = holder.getImageView();
         imageView.setVisibility(android.view.View.INVISIBLE);
+        //Download and get the image.
         if(imageUrl != null && !imageUrl.isEmpty()) {
             mImageDownloader.downloadImage(mContext, imageUrl, holder.getImageView());
         }

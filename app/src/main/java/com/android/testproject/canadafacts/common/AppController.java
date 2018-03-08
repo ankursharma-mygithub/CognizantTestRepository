@@ -6,12 +6,14 @@ import android.content.Context;
 import com.squareup.leakcanary.LeakCanary;
 
 /**
- * The extended application class
  * Created by ankursharma on 3/8/18.
  */
 
+/**
+ * * The extended application class
+ */
 public class AppController extends Application {
-    //The application context
+    //Application context
     private static Context mAppContext;
 
     @Override

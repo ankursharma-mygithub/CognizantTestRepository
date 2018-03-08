@@ -3,10 +3,12 @@ package com.android.testproject.canadafacts.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Represents each individual row item in the list displayed to the user
  * Created by ankursharma on 3/8/18.
  */
 
+/**
+ *  * Represents each individual row item in the list displayed to the user
+ */
 public class GalleryItem {
 
     //Title of the row information

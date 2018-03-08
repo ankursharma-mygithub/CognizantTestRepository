@@ -15,7 +15,7 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 /**
- * Module part of Dragger2
+ * Module part of Dagger2 for presenter
  */
 @Module
 public class PresenterModule {
