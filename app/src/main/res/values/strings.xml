@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CanadaFacts</string>
+    <string name="error_message">Error Message</string>
+</resources>
