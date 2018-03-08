@@ -1,5 +1,7 @@
 package com.android.testproject.canadafacts.ui;
 
+import android.widget.ImageView;
+
 /**
  * Contract for View/Presenter layers.
  * Created by ankursharma on 3/8/18.
@@ -8,9 +10,9 @@ package com.android.testproject.canadafacts.ui;
 public class MainContract {
 
     //Presenter layer contract
-    //Presenter layer contract
     interface Presenter {
         void getDataFromURL();
+        void onBindItemAtPosition(RowItemHolder holder, int position);
         int getItemsCount();
         void onStop();
     }
@@ -23,6 +25,13 @@ public class MainContract {
         void showErrorDialog(String message);
         void showWait();
         void removeWait();
+    }
+
+    //Contract for the view holder
+    interface RowItemHolder {
+        void updateTitle(String titleText);
+        void updateDescription(String descText);
+        ImageView getImageView();
     }
 
 }

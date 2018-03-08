@@ -36,4 +36,8 @@ dependencies {
 
     //RecyclerView
     compile 'com.android.support:recyclerview-v7:25.4.0'
+
+    //GSON
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.android.support:support-annotations:27.1.0'
 }
