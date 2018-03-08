@@ -7,7 +7,7 @@ import android.widget.ImageView;
  * Created by ankursharma on 3/8/18.
  */
 
-public class MainContract {
+public interface MainContract {
 
     //Presenter layer contract
     interface Presenter {

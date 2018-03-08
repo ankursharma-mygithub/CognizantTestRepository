@@ -12,16 +12,19 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.android.testproject.canadafacts.R;
+import com.android.testproject.canadafacts.di.DaggerMainActivityComponent;
+import com.android.testproject.canadafacts.di.PresenterModule;
+import com.android.testproject.canadafacts.di.RetrofitModule;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainGalleryActivity extends AppCompatActivity implements MainContract.View{
 
-    //For logging purpose
-    private static final String TAG = "MainGalleryActivity";
 
-    //Use BUTTERKNIFE library to bind the views
+    private static final String TAG = "MainGalleryActivity";
 
     //RecyclerView
     @BindView(R.id.recyclerView)
@@ -31,17 +34,26 @@ public class MainGalleryActivity extends AppCompatActivity implements MainContra
     @BindView(R.id.progress)
     ProgressBar mProgressBar;
 
+
     //SwipeRefreshLayout is a part of support library and is a standard way to implement
     //common pull to refresh pattern in Android
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
+
+    //Presenter class
+    @Inject
+    public MainGalleryActivityPresenter mPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DaggerMainActivityComponent.builder().retrofitModule(new RetrofitModule()).presenterModule(new PresenterModule(this)).build().inject(this);
         setContentView(R.layout.activity_main_gallery);
         ButterKnife.bind(this);
         //Initialize the views
         initializeViews();
+        //Display list of items
+        getAndDisplayListOfItems();
     }
 
     /**
@@ -58,7 +70,7 @@ public class MainGalleryActivity extends AppCompatActivity implements MainContra
                 @Override
                 public void onRefresh() {
                     mSwipeRefreshLayout.setRefreshing(false);
-                    //TodO:Get list of items here
+                    getAndDisplayListOfItems();
                 }
             });
         }
@@ -68,6 +80,16 @@ public class MainGalleryActivity extends AppCompatActivity implements MainContra
             mRecyclerView.setLayoutManager(new LinearLayoutManager(MainGalleryActivity.this));
         }
     }
+
+    /**
+     * Ask presenter to get the data from the specified URL.
+     */
+    private void getAndDisplayListOfItems() {
+        if(mPresenter != null) {
+            mPresenter.getDataFromURL();
+        }
+    }
+
 
     /**
      * Update title bar of the main view.
@@ -81,26 +103,20 @@ public class MainGalleryActivity extends AppCompatActivity implements MainContra
     }
 
     /**
-     * Display list of items retrieved from the JSON file.
+     * Called by presenter once the data is ready.
      */
     @Override
     public void displayListOfItems() {
-        //Todo:
+        if(mRecyclerView != null) {
+            mRecyclerView.setAdapter(new MainGalleryAdapter(mPresenter));
+        }
     }
 
-    /**
-     * Shows an error message to the user
-     * @param errorId : resource id of the string to display
-     */
     @Override
     public void showErrorDialog(int errorId) {
-        //Todo:
+        showErrorDialog(getString(errorId));
     }
 
-    /**
-     * Shows an error message to the user
-     * @param message : Message to display
-     */
     @Override
     public void showErrorDialog(String message) {
         Log.e(TAG, message);
@@ -121,7 +137,7 @@ public class MainGalleryActivity extends AppCompatActivity implements MainContra
     }
 
     /**
-     * Hide the progressbar
+     * Display progress bar
      */
     @Override
     public void showWait() {
@@ -129,18 +145,16 @@ public class MainGalleryActivity extends AppCompatActivity implements MainContra
     }
 
     /**
-     * SHow the progress bar
+     * Hide progress bar
      */
     @Override
     public void removeWait() {
         mProgressBar.setVisibility(View.GONE);
     }
 
-    /**
-     * Activity lifecycle callback
-     */
     @Override
     protected void onStop() {
         super.onStop();
+        mPresenter.onStop();
     }
 }

@@ -11,12 +11,13 @@ import com.squareup.leakcanary.LeakCanary;
  */
 
 public class AppController extends Application {
-    private static Context mContext;
+    //The application context
+    private static Context mAppContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext = this.getApplicationContext();
+        mAppContext = this.getApplicationContext();
         //Add LeakCanary lib for memory leak detection.
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
@@ -27,7 +28,7 @@ public class AppController extends Application {
     }
 
     public static Context getContext() {
-        return mContext;
+        return mAppContext;
     }
 
 }
