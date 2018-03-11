@@ -11,6 +11,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.android.testproject.canadafacts.common.Utils;
 import com.android.testproject.canadafacts.ui.MainGalleryActivity;
 import com.android.testproject.canadafacts.ui.MainGalleryAdapter;
 
@@ -52,21 +53,23 @@ public class MainGalleryActivityTest {
         }catch (InterruptedException e) {
             Log.e(TAG, e.toString());
         }
-        //Get recyclerview
-        RecyclerView recyclerView = (RecyclerView) activityTestRule.getActivity().findViewById(R.id.recyclerView);
-        Espresso.onView(ViewMatchers.withId(R.id.recyclerView)).check(matches(isDisplayed()));
-        //Check if all items are loaded or not. Assume number of items in list are 13.
-        MainGalleryAdapter adapter = (MainGalleryAdapter)(recyclerView.getAdapter());
-        int count = activityTestRule.getActivity().mPresenter.getItemsCount();
-        //Ensure that all elements from list are displayed in the recyclerview.
-        assertEquals(adapter.getItemCount(), count);
+        if(Utils.isNetworkConnected(activityTestRule.getActivity())) {
+            //Get recyclerview
+            RecyclerView recyclerView = (RecyclerView) activityTestRule.getActivity().findViewById(R.id.recyclerView);
+            Espresso.onView(ViewMatchers.withId(R.id.recyclerView)).check(matches(isDisplayed()));
+            //Check if all items are loaded or not. Assume number of items in list are 13.
+            MainGalleryAdapter adapter = (MainGalleryAdapter)(recyclerView.getAdapter());
+
+                int count = activityTestRule.getActivity().mPresenter.getItemsCount();
+                //Ensure that all elements from list are displayed in the recyclerview.
+                assertEquals(adapter.getItemCount(), count);
+            }
     }
 
     /**
      * Asserting the screen state in error state(no internet)
      * Assumption : Device is not connected to internet.
      * SUCCESS: When device is disconnected from internet.
-     * FAILS : When device is connected to internet
      */
     @Test
     public void checkErrorMessageIsDisplayedForNoInternet()  {
@@ -79,7 +82,9 @@ public class MainGalleryActivityTest {
         //If device is not connected to internet than the applications hould show an error dialog.
         //Here checking if the dialog si displayed with proper message or not.
         String errorMessage = "Please connect to internet to view interested things about Canada.";
-        Espresso.onView(ViewMatchers.withText(errorMessage)).check(matches(isDisplayed()));
+        if(!Utils.isNetworkConnected(activityTestRule.getActivity())) {
+            Espresso.onView(ViewMatchers.withText(errorMessage)).check(matches(isDisplayed()));
+        }
     }
 
 }
